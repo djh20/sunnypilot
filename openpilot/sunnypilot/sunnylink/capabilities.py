@@ -9,6 +9,7 @@ import json
 from openpilot.cereal import custom, messaging
 from opendbc.car.structs import car
 from opendbc.car.hyundai.values import CAR as HYUNDAI_CAR, UNSUPPORTED_LONGITUDINAL_CAR
+from opendbc.car.nissan.values import CAR as NISSAN_CAR
 from opendbc.car.subaru.values import CAR as SUBARU_CAR, SubaruFlags
 from opendbc.car.toyota.values import CAR as TOYOTA_CAR, ToyotaFlags
 from opendbc.sunnypilot.car.interfaces import has_bsm
@@ -134,6 +135,15 @@ def _resolve_brand_capabilities(caps: dict, bundle_platform: str, CP) -> None:
     elif CP is not None:
       caps["subaru_has_sng"] = not bool(CP.flags & (SubaruFlags.GLOBAL_GEN2 | SubaruFlags.HYBRID))
       caps["has_stop_and_go"] = caps["subaru_has_sng"]
+
+  elif brand == "nissan":
+    if bundle_platform:
+      try:
+        caps["has_stop_and_go"] = NISSAN_CAR[bundle_platform] != NISSAN_CAR.NISSAN_ALTIMA
+      except KeyError:
+        cloudlog.exception(f"capabilities: unknown nissan platform {bundle_platform!r}")
+    elif CP is not None:
+      caps["has_stop_and_go"] = CP.carFingerprint != NISSAN_CAR.NISSAN_ALTIMA
 
   elif brand == "toyota":
     if bundle_platform:

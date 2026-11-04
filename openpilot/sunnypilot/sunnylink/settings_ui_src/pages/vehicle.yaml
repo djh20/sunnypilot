@@ -27,6 +27,20 @@ sections:
     enablement:
     - $ref: '#/macros/offroad'
     - $ref: '#/macros/longitudinal'
+- id: nissan
+  title: Nissan Settings
+  description: ''
+  items:
+  - key: NissanStopAndGo
+    widget: toggle
+    title: Stop and Go (Beta)
+    description: Experimental feature to enable auto-resume during stop-and-go for
+      certain supported Nissan ProPILOT platforms.
+    enablement:
+    - $ref: '#/macros/offroad'
+    - type: capability
+      field: has_stop_and_go
+      equals: true
 - id: subaru
   title: Subaru Settings
   description: ''
